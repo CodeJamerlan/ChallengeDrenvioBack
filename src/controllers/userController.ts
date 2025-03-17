@@ -1,4 +1,5 @@
 import {Response, Request} from "express";
+import mongoose from "mongoose";
 import User from "../models/User";
 
 /**
@@ -19,13 +20,13 @@ export const getUsers = async( req: Request, res: Response) => {
 export const getUser = async(req: Request, res:Response ) => {
     try {
         const {userId} = req.params;
-        const user = await User.find({ userId })
+        const user = await User.findById(new mongoose.Types.ObjectId(userId))
         if (!user) {
             res.status(404).json({
                 message: 'Usuario no encontrado'
             });
         }
-        res.status(200).json({ data: user });
+        res.status(200).json(user);
     } catch (error) {
         console.error('Error al buscar el usuario:', error);
         res.status(500).json({ error: 'Ocurrió un error al cargar el usuario' });

@@ -14,11 +14,10 @@ export const getProducts = async (req: Request, res:Response) => {
     const specialPrices: IPrecioEspecial[] = await setSpecialOffersByUser(userId);
     products.forEach(product => {
         const matchingSpecialPrice = specialPrices.find(special => special.productId.id === product.id);
-        if (matchingSpecialPrice) {
-            console.log(product.price);
-            console.log(matchingSpecialPrice?.specialPrice)
+        if (matchingSpecialPrice) 
+            {
             product.price = matchingSpecialPrice.specialPrice;
-        }
+            }
     });
     res.json(products);
 };
@@ -32,7 +31,6 @@ export const getProductById = async(req:Request, res:Response) => {
     try {
         const {productId} = req.params;
         const product = await Product.findById(productId);
-
         if (!product) {
             res.status(404).json({
                 message: 'Producto no encontrado'
