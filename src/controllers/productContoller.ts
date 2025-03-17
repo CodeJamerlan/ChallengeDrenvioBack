@@ -1,5 +1,7 @@
 import {Request, Response} from "express";
+import { setSpecialOffersByUser } from "../services/specialOfferService";
 import Product from '../models/Product';
+import { IPrecioEspecial } from "../models/SpecialOffer";
 
 /**
  * Consulta todos los productos con verificacion si el usuario tiene precios especiales
@@ -7,10 +9,18 @@ import Product from '../models/Product';
  * @param res 
  */
 export const getProducts = async (req: Request, res:Response) => {
+    const { userId } = req.params;
     const products = await Product.find();
+    const specialPrices: IPrecioEspecial[] = await setSpecialOffersByUser(userId);
+    products.forEach(product => {
+        const matchingSpecialPrice = specialPrices.find(special => special.productId.id === product.id);
+        if (matchingSpecialPrice) {
+            console.log(product.price);
+            console.log(matchingSpecialPrice?.specialPrice)
+            product.price = matchingSpecialPrice.specialPrice;
+        }
+    });
     res.json(products);
-    //TODO validar que el producto este cambiando
-
 };
 
 /**
