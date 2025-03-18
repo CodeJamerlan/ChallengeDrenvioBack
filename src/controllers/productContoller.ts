@@ -8,7 +8,7 @@ import { IPrecioEspecial } from "../models/SpecialOffer";
  * @param req 
  * @param res 
  */
-export const getProducts = async (req: Request, res:Response) => {
+export const getProductsById = async (req: Request, res:Response) => {
     const { userId } = req.params;
     const products = await Product.find();
     const specialPrices: IPrecioEspecial[] = await setSpecialOffersByUser(userId);
@@ -19,6 +19,16 @@ export const getProducts = async (req: Request, res:Response) => {
             product.price = matchingSpecialPrice.specialPrice;
             }
     });
+    res.json(products);
+};
+
+/**
+ * Consulta que retorna todo los productos
+ * @param req 
+ * @param res 
+ */
+export const getProducts = async (req: Request, res:Response) => {
+    const products = await Product.find();
     res.json(products);
 };
 

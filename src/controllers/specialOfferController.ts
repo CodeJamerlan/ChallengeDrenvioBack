@@ -30,7 +30,6 @@ export const addSpecialOffer = async(req: Request, res: Response) =>
             });
 
             await newSpecialOffer.save();
-            console.log('Precio especial agregado:', newSpecialOffer);
             res.status(201).json({
                 message: 'Precio creado Existosamente',
                 data: newSpecialOffer
